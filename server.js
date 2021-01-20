@@ -33,6 +33,14 @@ app.get('/lessons', (req, res, next) => {
     });
 });
 
+// POST route to save an order
+app.post('/order', (req, res, next) => {
+    db.collection('orders').insert(req.body, (e, results) => {
+        if (e) return next();
+        res.send(results.ops);
+    });
+});
+
 
 
 app.use((req, res) => {
