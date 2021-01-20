@@ -43,6 +43,18 @@ app.post('/order', (req, res, next) => {
 
 
 
+app.put('/decrease/:id', (req, res, next) => {
+
+    let spaces = -1 * parseInt(req.body.spaces);
+    db.collection('lessons').update({ "_id": new ObjectID(req.params.id) },
+        { "$inc": { "availability": spaces } }, function (err, result) {
+            if (err) return next();
+            res.json({'message':'all is good'});
+    });
+
+});
+
+
 app.use((req, res) => {
     res.status(404).json({'error': true, 'message': 'something went wrong'});
 });
