@@ -20,46 +20,72 @@ app.use((req, res, next) => {
 
 // connect to db
 let db;
-MongoClient.connect('mongodb+srv://root:superhardpassword@cluster0.lu2f0.mongodb.net/coursework2?retryWrites=true&w=majority', (err, client) => {
+MongoClient.connect('mongodb+srv://root:superhardpassword@cluster0.lu2f0.mongodb.net/coursework2?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
     db = client.db('coursework2');
 });
 
 
-// GET route to get a list of lessons
-app.get('/lessons', (req, res, next) => {
-    db.collection('lessons').find({}).toArray((e, results) => {
+app.param('collection', (req, res, next, collection) => {
+    req.collection = db.collection(collection)
+    return next();
+});
+
+// GET route to get all records from database
+app.get('/api/:collection', (req, res, next) => {
+    req.collection.find({}).toArray((e, results) => {
         if (e) return next();
         res.json(results);
     });
 });
 
-// POST route to save an order
-app.post('/order', (req, res, next) => {
-    db.collection('orders').insert(req.body, (e, results) => {
+// POST route to add record to database
+app.post('/api/:collection', (req, res, next) => {
+    req.collection.insert(req.body, (e, results) => {
         if (e) return next();
-        res.send(results.ops);
+        res.json(results.ops);
     });
 });
 
+// PUT route to update record in database
+app.put('/api/:collection/:id', (req, res, next) => {
+    req.collection.updateOne(
+        { _id: new ObjectID(req.params.id) },
+        { $set: req.body },
+        { safe: true, multi: false },
+        (e, result) => {
+            if(e || result.result.n !== 1) return next();
+            res.json({ message: 'success' });
+        });
+});
 
+// PUT route to reduce value of specified attribute of the record in database
+app.put('/api/:collection/:id/reduce/:name/:value', (req, res, next) => {
 
-app.put('/decrease/:id', (req, res, next) => {
+    let value = -1 * parseInt(req.params.value);
+    let name = req.params.name;
 
-    let spaces = -1 * parseInt(req.body.spaces);
-    db.collection('lessons').update({ "_id": new ObjectID(req.params.id) },
-        { "$inc": { "availability": spaces } }, function (err, result) {
-            if (err) return next();
-            res.json({'message':'all is good'});
-    });
+    const attr = {};
+    attr[name] = value;
 
+    req.collection.updateOne(
+        { _id: new ObjectID(req.params.id) },
+        { "$inc": attr },
+        { safe: true, multi: false },
+        (e, result) => {
+            if(e || result.result.n !== 1) return next();
+            res.json({ message: 'success' });
+        });
 });
 
 
+// 404 middleware
 app.use((req, res) => {
-    res.status(404).json({'error': true, 'message': 'something went wrong'});
+    res.status(404).json({error: true, message: 'something went wrong'});
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+    console.log("\n\nServer is running at http://localhost:3000/\n\n");
+});
 
 
 // let publicPath = path.resolve(__dirname, 'public');
