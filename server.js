@@ -32,7 +32,6 @@ app.get('/lessons', (req, res, next) => {
 });
 
 
-
 app.use((req, res) => {
     res.status(404).json({'error': true, 'message': 'something went wrong'});
 });
