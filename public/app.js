@@ -103,7 +103,6 @@ let app = new Vue({
         },
         checkout() {
             
-
             this.cart.forEach(item => {
 
                 let body = {
@@ -118,6 +117,7 @@ let app = new Vue({
             });
 
             alert("Thanks for your order");
+            this.getLessons();
             this.cart = [];
         },
         displayCart(value) {
