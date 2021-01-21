@@ -14,6 +14,7 @@ app.use((req, res, next) => {
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "*");
     res.header("Access-Control-Allow-Headers", "*");
     next();
 });
@@ -27,7 +28,7 @@ app.use(function(req, res, next) {
 
 // connect to db
 let db;
-MongoClient.connect('mongodb+srv://root:superhardpassword@cluster0.lu2f0.mongodb.net/coursework2?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+MongoClient.connect('mongodb+srv://root:superhardpassword@cluster0.lu2f0.mongodb.net/', {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
     db = client.db('coursework2');
 });
 
