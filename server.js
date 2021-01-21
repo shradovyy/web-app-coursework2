@@ -12,6 +12,13 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "*");
+    next();
+});
+
+
 // app.use((req, res, next) => {
 //     console.log("image exists");
 //     next();
