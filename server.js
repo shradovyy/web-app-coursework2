@@ -1,11 +1,13 @@
 const express = require("express");
 const path = require("path");
+const cors = require("cors");
 const MongoClient = require('mongodb').MongoClient;
 
 const app = express();
 const ObjectID = require('mongodb').ObjectID;
 
 app.use(express.json());
+app.use(cors());
 
 app.use((req, res, next) => {
     console.log("Requested url: "+ req.url);
