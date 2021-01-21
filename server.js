@@ -78,15 +78,19 @@ app.put('/api/:collection/:id/reduce/:name/:value', (req, res, next) => {
 });
 
 
+
+let publicPath = path.resolve(__dirname, 'public');
+app.use(express.static(publicPath));
+
+
 // 404 middleware
 app.use((req, res) => {
     res.status(404).json({error: true, message: 'something went wrong'});
 });
+
 
 app.listen(3000, () => {
     console.log("\n\nServer is running at http://localhost:3000/\n\n");
 });
 
 
-// let publicPath = path.resolve(__dirname, 'public');
-// app.use(express.static(publicPath));
