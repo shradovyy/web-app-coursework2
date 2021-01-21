@@ -78,8 +78,35 @@ let app = new Vue({
                 item.quantity++;
             }
         },
+        addOrder(body) {
+
+            fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            }).then(response => response.json())
+            .then(data => { return data }).catch(err => { return data});
+
+        },
         checkout() {
-            alert('The order has been submitted.');
+            
+
+            this.cart.forEach(item => {
+
+                let body = {
+                    "name": this.order.name.value,
+                    "phone": this.order.phone.value,
+                    "lessonID": item.lesson._id,
+                    "quantity": item.quantity
+                };
+
+                this.addOrder(body);
+            });
+
+            alert("Thanks for your order");
+
             this.cart = [];
         },
         displayCart(value) {
