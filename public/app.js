@@ -90,6 +90,17 @@ let app = new Vue({
             .then(data => { return data }).catch(err => { return data});
 
         },
+        updateLessonAvailability(id, quantity) {
+
+            fetch(`/api/lessons/${id}/reduce/availability/${quantity}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+            .then(data => { return data }).catch(err => { return data});
+
+        },
         checkout() {
             
 
@@ -101,12 +112,12 @@ let app = new Vue({
                     "lessonID": item.lesson._id,
                     "quantity": item.quantity
                 };
-
                 this.addOrder(body);
+                this.updateLessonAvailability(item.lesson._id, item.quantity);
+
             });
 
             alert("Thanks for your order");
-
             this.cart = [];
         },
         displayCart(value) {
