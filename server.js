@@ -88,8 +88,9 @@ app.use((req, res) => {
     res.status(404).json({error: true, message: 'something went wrong'});
 });
 
+const port = process.env.PORT || 3000;
 
-app.listen(3000, () => {
+app.listen(port, () => {
     console.log("\n\nServer is running at http://localhost:3000/\n\n");
 });
 
