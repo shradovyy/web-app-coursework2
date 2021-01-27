@@ -22,7 +22,6 @@ MongoClient.connect('mongodb+srv://root:superhardpassword@cluster0.lu2f0.mongodb
     db = client.db('coursework2');
 });
 
-
 app.param('collection', (req, res, next, collection) => {
     req.collection = db.collection(collection)
     return next();
