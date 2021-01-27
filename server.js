@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 
 // connect to db
 let db;
-MongoClient.connect('mongodb+srv://<username>:<password>@cluster0.lu2f0.mongodb.net/', {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+MongoClient.connect('mongodb+srv://root:superhardpassword@cluster0.lu2f0.mongodb.net/', {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
     db = client.db('coursework2');
 });
 
