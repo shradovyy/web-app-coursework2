@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const cors = require("cors");
 const MongoClient = require('mongodb').MongoClient;
 
@@ -13,11 +14,6 @@ app.use((req, res, next) => {
     console.log("Requested url: "+ req.url);
     next();
 });
-
-// app.use((req, res, next) => {
-//     console.log("image exists");
-//     next();
-// });
 
 
 // connect to db
@@ -83,6 +79,18 @@ app.put('/api/:collection/:id/reduce/:name/:value', (req, res, next) => {
 
 let publicPath = path.resolve(__dirname, 'public');
 app.use(express.static(publicPath));
+
+
+app.use(function(req, res, next) {
+    // Uses path.join to find the path where the file should be
+    var filePath = path.join(__dirname, "static", req.url);
+    // Built-in fs.stat gets info about a file
+    fs.stat(filePath, function(err, fileInfo) {
+        if (err) { next(); return; }
+        if (fileInfo.isFile()) res.sendFile(filePath);
+        else next();
+    });
+});
 
 
 // 404 middleware
